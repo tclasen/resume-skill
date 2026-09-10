@@ -33,6 +33,14 @@ def main(argv=None):
             command.add_argument("--file", required=True, help="UTF-8 OKF Markdown concept")
     prop = commands.add_parser("property", help="Look up an exact approved ontology property definition")
     prop.add_argument("uri")
+    snap = commands.add_parser("snapshot", help="Hash a bundle for a current assessment")
+    snap.add_argument("--workspace", required=True)
+    snap.add_argument("--kind", choices=("applicant", "position"), required=True)
+    snap.add_argument("--bundle", required=True)
+    assessment = commands.add_parser("assess", help="Validate a reference-only plan and write its evidence report")
+    assessment.add_argument("--workspace", required=True)
+    assessment.add_argument("--file", required=True)
+    assessment.add_argument("--id", required=True)
     args = parser.parse_args(argv)
     try:
         validate_pins()
@@ -56,6 +64,12 @@ def main(argv=None):
                 if args.uri not in catalog:
                     raise ValueError("URI is not a defined property in the approved pinned ontologies")
                 print(json.dumps(catalog[args.uri], ensure_ascii=False, indent=2))
+            elif args.command in {"snapshot", "assess"}:
+                from assessment import assess, load_plan, snapshot
+                if args.command == "snapshot":
+                    print(json.dumps(snapshot(args.workspace, args.kind, args.bundle), indent=2))
+                else:
+                    print(assess(args.workspace, load_plan(args.file), args.id))
     except ModuleNotFoundError as error:
         print(f"Missing dependency: {error.name}. Install scripts/requirements.txt in a virtual environment.", file=sys.stderr)
         return 1

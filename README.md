@@ -6,7 +6,8 @@ position requirements with supporting evidence.
 
 The repository includes pinned format and ontology artifacts with offline
 checksum validation, separate private workspace setup, and OKF concept authoring
-and validation. Guided skill workflows and document exporters are not yet
+and validation, plus qualification and resume evidence reports. Guided skill
+workflows and document exporters are not yet
 implemented. The full workflow below describes their intended behavior.
 
 ## Purpose and workflow
@@ -123,10 +124,17 @@ reports tracing claims to their supporting assertions, sources, and verification
 states. Tailoring may select, reorder, and rephrase supported facts while
 preserving their meaning, scope, and qualifications.
 
-Qualification assessments will map each position requirement to supporting
+Qualification assessments map each position requirement to supporting
 facts, partial support, missing evidence, or demonstrated gaps, without numeric
-scoring. Reports will distinguish missing evidence from evidence that a
+scoring. Reports distinguish missing evidence from evidence that a
 requirement is not met, and explicit requirements from inferred expectations.
+
+Follow the [assessment reference](skills/resume/references/assessment.md) to
+prepare a plan referencing canonical assertions and generate a report with
+`resume.py assess`. The tool checks complete requirement coverage, recorded
+claim eligibility, derivation inputs, and current bundle snapshots. Review
+decisions remain explicit inputs grounded in source review; the tool does not
+infer truth or promote canonical verification.
 
 ## Portability and privacy
 
@@ -174,5 +182,5 @@ versions, incomplete manifests, and nonlocal artifact paths. Stop affected
 authoring if validation fails. Specification and ontology upgrades require
 deliberate maintainer review; never refresh pins automatically.
 
-Guided skill workflows, qualification analysis, and PDF and DOCX exporters remain
+Guided skill workflows and PDF and DOCX exporters remain
 future work.
