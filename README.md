@@ -7,18 +7,18 @@ contains only the reusable skill, code, references, and synthetic tests.
 
 ## Install
 
-Install with the [skills.sh CLI](https://www.skills.sh/docs) from the private
-repository where you want to use it. Choose your agent interactively:
+Install [tclasen/resume-skill](https://github.com/tclasen/resume-skill) with the
+[skills.sh CLI](https://www.skills.sh/docs) from the private repository where
+you want to use it. Choose your agent interactively:
 
 ```sh
-npx skills add /absolute/path/to/this-repository --skill resume
+npx skills add tclasen/resume-skill --skill resume
 ```
 
-Once this repository is hosted, replace the local path with its Git URL or
-GitHub `owner/repo`. To install for every supported agent:
+To install for every supported agent:
 
 ```sh
-npx skills add <git-url-or-local-path> --skill resume --agent '*' --copy
+npx skills add tclasen/resume-skill --skill resume --agent '*' --copy
 ```
 
 Use `--copy` when you prefer independent copies over agent-directory symlinks.

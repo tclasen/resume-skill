@@ -12,7 +12,7 @@ that adapter or depend on a host-specific frontmatter extension.
 Reproduce in a new temporary project directory, not an existing agent project:
 
 ```sh
-DISABLE_TELEMETRY=1 npx --yes skills@1.5.25 add <absolute-source-repository> --all --copy
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.25 add tclasen/resume-skill --all --copy
 ```
 
 Then, from this source checkout:
