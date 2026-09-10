@@ -178,6 +178,10 @@ host's available tools; unavailable checks must be reported honestly.
 
 ## Development
 
+See the [security policy](SECURITY.md) for private vulnerability reporting and
+[supply-chain security](docs/supply-chain-security.md) for the SLSA Build Level 2
+release design and artifact verification instructions.
+
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r tests/requirements.txt
