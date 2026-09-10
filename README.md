@@ -5,9 +5,9 @@ graphs, producing personalized resumes, and assessing qualifications against
 position requirements with supporting evidence.
 
 The repository includes pinned format and ontology artifacts with offline
-checksum validation and separate private workspace setup. Guided skill workflows,
-assertion authoring, and document exporters are not yet implemented. The workflow
-below describes their intended behavior.
+checksum validation, separate private workspace setup, and OKF concept authoring
+and validation. Guided skill workflows and document exporters are not yet
+implemented. The full workflow below describes their intended behavior.
 
 ## Purpose and workflow
 
@@ -45,6 +45,22 @@ role or event, time, and measurement context, where applicable, so decomposition
 does not strip away meaning or imply broader experience than the evidence supports.
 
 ## Provenance, verification, and evidence integrity
+
+Use the [authoring reference](skills/resume/references/authoring.md) for the
+implemented concept profile, evidence conventions, and validation limits.
+Install the authoring dependency and validate a bundle:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r skills/resume/scripts/requirements.txt
+.venv/bin/python skills/resume/scripts/resume.py validate --workspace /absolute/path/to/private-resumes --kind applicant --bundle solo
+```
+
+On Windows, use `.venv\Scripts\python.exe` for the virtual environment interpreter.
+The `add` command imports a supplied OKF Markdown concept without overwriting;
+`property` looks up an exact property URI in the pinned ontology definitions.
+Validation checks structure and metadata, while evidence meaning and ontology
+value constraints require source-grounded review.
 
 Every assertion must have source attribution, authorship metadata, and a
 determinable verification state. The design will use OKF's `sources`,
@@ -150,7 +166,7 @@ inside the skill distribution directory. Validate all four artifacts offline:
 
 ```sh
 python3 skills/resume/scripts/pins.py
-python3 -m unittest discover -s tests -v
+.venv/bin/python -m unittest discover -s tests -v
 ```
 
 The validator rejects missing artifacts, checksum mismatches, unapproved
@@ -158,5 +174,5 @@ versions, incomplete manifests, and nonlocal artifact paths. Stop affected
 authoring if validation fails. Specification and ontology upgrades require
 deliberate maintainer review; never refresh pins automatically.
 
-Skill implementation, assertion authoring, and PDF and DOCX exporters remain
+Guided skill workflows, qualification analysis, and PDF and DOCX exporters remain
 future work.
