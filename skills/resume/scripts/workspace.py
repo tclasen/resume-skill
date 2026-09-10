@@ -35,8 +35,18 @@ def git_root(path):
 def exclusive_write(path, content):
     """Never clobber an existing file; private permissions on supported systems."""
     descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-    with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as stream:
-        stream.write(content)
+    try:
+        stream = os.fdopen(descriptor, "w", encoding="utf-8", newline="\n")
+    except BaseException:
+        os.close(descriptor)
+        Path(path).unlink()
+        raise
+    try:
+        with stream as writer:
+            writer.write(content)
+    except BaseException:
+        Path(path).unlink(missing_ok=True)
+        raise
 
 
 def load_workspace(value):

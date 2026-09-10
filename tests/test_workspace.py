@@ -3,10 +3,13 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+from contextlib import contextmanager
+import os
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "skills/resume/scripts"
 sys.path.insert(0, str(SCRIPTS))
-from workspace import create_bundle, init_workspace, load_workspace
+from workspace import create_bundle, exclusive_write, init_workspace, load_workspace
 
 
 class WorkspaceTests(unittest.TestCase):
@@ -80,6 +83,32 @@ class WorkspaceTests(unittest.TestCase):
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.strip(), str(self.root))
+
+    def test_failed_write_removes_only_its_new_partial_file(self):
+        self.root.mkdir()
+        existing = self.root / "existing.md"
+        existing.write_text("preserve")
+        with self.assertRaises(FileExistsError):
+            exclusive_write(existing, "replacement")
+        self.assertEqual(existing.read_text(), "preserve")
+        original_fdopen = os.fdopen
+
+        @contextmanager
+        def failing_stream(descriptor, *args, **kwargs):
+            with original_fdopen(descriptor, *args, **kwargs) as stream:
+                class PartialWriter:
+                    def write(self, content):
+                        stream.write(content[:5])
+                        stream.flush()
+                        raise OSError("synthetic disk full")
+                yield PartialWriter()
+
+        new = self.root / "new.md"
+        with patch("workspace.os.fdopen", failing_stream):
+            with self.assertRaisesRegex(OSError, "disk full"):
+                exclusive_write(new, "content that must not be left half-written")
+        self.assertFalse(new.exists())
+        self.assertEqual(existing.read_text(), "preserve")
 
 
 if __name__ == "__main__":
