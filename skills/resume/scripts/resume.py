@@ -41,6 +41,13 @@ def main(argv=None):
     assessment.add_argument("--workspace", required=True)
     assessment.add_argument("--file", required=True)
     assessment.add_argument("--id", required=True)
+    export = commands.add_parser("export", help="Export a validated plan to PDF, DOCX, and a separate evidence report")
+    export.add_argument("--workspace", required=True)
+    export.add_argument("--file", required=True)
+    export.add_argument("--id", required=True)
+    export.add_argument("--paper", choices=("letter", "a4"), default="letter")
+    export.add_argument("--font", help="Optional TrueType font with required character coverage")
+    export.add_argument("--bold-font", help="Optional bold TrueType font")
     args = parser.parse_args(argv)
     try:
         validate_pins()
@@ -70,6 +77,10 @@ def main(argv=None):
                     print(json.dumps(snapshot(args.workspace, args.kind, args.bundle), indent=2))
                 else:
                     print(assess(args.workspace, load_plan(args.file), args.id))
+            elif args.command == "export":
+                from assessment import load_plan
+                from exporter import export_resume
+                print(export_resume(args.workspace, load_plan(args.file), args.id, args.paper, args.font, args.bold_font))
     except ModuleNotFoundError as error:
         print(f"Missing dependency: {error.name}. Install scripts/requirements.txt in a virtual environment.", file=sys.stderr)
         return 1

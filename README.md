@@ -6,9 +6,8 @@ position requirements with supporting evidence.
 
 The repository includes pinned format and ontology artifacts with offline
 checksum validation, separate private workspace setup, and OKF concept authoring
-and validation, plus qualification and resume evidence reports. Guided skill
-workflows and document exporters are not yet
-implemented. The full workflow below describes their intended behavior.
+and validation, qualification and resume evidence reports, and PDF/DOCX export.
+Guided skill packaging remains in progress.
 
 ## Purpose and workflow
 
@@ -117,9 +116,9 @@ preserve that evidence in narrative form and report the modeling gap. Introducin
 another ontology requires maintainer approval and a documented pin before use.
 Automatic ontology upgrades are prohibited.
 
-## Intended outputs
+## Outputs
 
-The skills will produce personalized PDF and DOCX resumes with separate evidence
+The exporter produces personalized PDF and DOCX resumes with separate evidence
 reports tracing claims to their supporting assertions, sources, and verification
 states. Tailoring may select, reorder, and rephrase supported facts while
 preserving their meaning, scope, and qualifications.
@@ -135,6 +134,11 @@ prepare a plan referencing canonical assertions and generate a report with
 claim eligibility, derivation inputs, and current bundle snapshots. Review
 decisions remain explicit inputs grounded in source review; the tool does not
 infer truth or promote canonical verification.
+
+Export a reviewed plan with `resume.py export --workspace <private-root> --file
+<plan.json> --id <new-output-id>`. The [export reference](skills/resume/references/export.md)
+describes PDF/DOCX output, separate evidence reports, paper sizes, font coverage,
+and final document review. Generated outputs remain in the private repository.
 
 ## Portability and privacy
 
@@ -174,6 +178,7 @@ inside the skill distribution directory. Validate all four artifacts offline:
 
 ```sh
 python3 skills/resume/scripts/pins.py
+.venv/bin/python -m pip install -r tests/requirements.txt
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
@@ -182,5 +187,4 @@ versions, incomplete manifests, and nonlocal artifact paths. Stop affected
 authoring if validation fails. Specification and ontology upgrades require
 deliberate maintainer review; never refresh pins automatically.
 
-Guided skill workflows and PDF and DOCX exporters remain
-future work.
+Guided skill packaging remains in progress.
