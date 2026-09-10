@@ -189,6 +189,14 @@ python3 -m venv .venv
 .venv/bin/python skills/resume/scripts/pins.py
 ```
 
+CI also audits runtime, test, and audit-tool dependencies for known vulnerabilities
+on pull requests, pushes to `main`, and weekly. To run that check locally:
+
+```sh
+.venv/bin/python -m pip install -r tests/security-requirements.txt
+.venv/bin/python -m pip_audit -r tests/security-requirements.txt
+```
+
 Tests use synthetic data in temporary separate repositories. They exercise
 workspace isolation, provenance and ontology validation, requirement coverage,
 eligibility rejection, stale evidence, derivations, and PDF/DOCX text and export
