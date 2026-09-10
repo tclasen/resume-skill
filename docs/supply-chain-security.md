@@ -85,6 +85,8 @@ pull request. Review account access and security alerts regularly.
 These are GitHub settings, not effects of checking in YAML. Their applied state
 must be verified through the API or repository settings. Two-factor authentication
 is an account control and cannot be enforced by this personal repository.
+See the [settings record](https://github.com/tclasen/resume-skill/blob/main/docs/github-security-settings.md) for applied controls and
+remaining hosted verification.
 
 References: [SLSA v1.2 build requirements](https://slsa.dev/spec/v1.2/build-requirements),
 [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations),
