@@ -5,9 +5,9 @@ graphs, producing personalized resumes, and assessing qualifications against
 position requirements with supporting evidence.
 
 The repository includes pinned format and ontology artifacts with offline
-checksum validation. Skills, knowledge bundles, private workspace setup, and
-document exporters are not yet implemented. The workflow below describes their
-intended behavior.
+checksum validation and separate private workspace setup. Guided skill workflows,
+assertion authoring, and document exporters are not yet implemented. The workflow
+below describes their intended behavior.
 
 ## Purpose and workflow
 
@@ -119,7 +119,28 @@ is a design goal; compatibility with particular agent hosts has not been tested.
 
 Real applicant data, source materials, knowledge bundles, analyses, and generated
 outputs must remain in separate private workspaces outside this repository.
-Private workspace setup remains future implementation work.
+Initialize a new data repository outside this checkout, or use the root of an
+existing separate Git repository. Python 3.10+ and Git are required:
+
+```sh
+python3 skills/resume/scripts/resume.py init --workspace /absolute/path/to/private-resumes
+python3 skills/resume/scripts/resume.py bundle --workspace /absolute/path/to/private-resumes --kind applicant --id solo
+python3 skills/resume/scripts/resume.py bundle --workspace /absolute/path/to/private-resumes --kind position --id engineer
+python3 skills/resume/scripts/resume.py workspace --workspace /absolute/path/to/private-resumes
+```
+
+Use an absolute script path when running from another directory. Setup preserves
+existing repository files and creates `applicants/`, `positions/`, `sources/`,
+`analyses/`, and `outputs/`. Each applicant and position gets its own OKF bundle.
+Repeated setup validates the existing workspace. Conflicting directories,
+symlinked workspace paths, and locations inside this skill repository are rejected.
+Use physical paths (for example, `/private/tmp` instead of `/tmp` on macOS).
+
+Generated outputs are Git-ignored. Canonical evidence and analyses can be tracked
+in the private data repository. Setup does not commit, add a remote, or publish
+data. Keep any remote private; review staged files before committing or sharing.
+New data directories and configuration files use private local permissions where
+supported; existing repository permissions are preserved.
 
 ## Format and ontology pins
 
@@ -137,5 +158,5 @@ versions, incomplete manifests, and nonlocal artifact paths. Stop affected
 authoring if validation fails. Specification and ontology upgrades require
 deliberate maintainer review; never refresh pins automatically.
 
-Skill implementation, private workspace setup, and PDF and DOCX exporters remain
+Skill implementation, assertion authoring, and PDF and DOCX exporters remain
 future work.
