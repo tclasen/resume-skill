@@ -71,6 +71,35 @@ corroboration, even when both involve human review.
   must not automatically promote verification state or inherit human review;
   the resulting claim requires its own evidence assessment.
 
+## Approved ontologies and semantic metadata
+
+The project selects the following ontologies and versions for future skills.
+The source links document these selections; artifact vendoring and checksum pins
+remain future work under the pinning requirements below.
+
+| Ontology and source | Selected version | Canonical namespace | Intended use |
+| --- | --- | --- | --- |
+| [Schema.org](https://schema.org/docs/releases.html) | 30.0 | `https://schema.org/` | People, organizations, employment, credentials, and job requirements |
+| [PROV-O](https://www.w3.org/TR/2013/REC-prov-o-20130430/) | W3C Recommendation, 2013-04-30 | `http://www.w3.org/ns/prov#` | Attribution, derivation, and provenance relationships |
+| [SKOS](https://www.w3.org/TR/2009/REC-skos-reference-20090818/) | W3C Recommendation, 2009-08-18 | `http://www.w3.org/2004/02/skos/core#` | Concept labels, hierarchies, and mappings |
+
+Every additional semantic metadata attribute must identify an exact property URI
+defined in an approved, pinned ontology. Local aliases require explicit mappings
+to those URIs and must preserve the property's meaning and value constraints.
+Invented properties are prohibited. Vocabularies referenced by an approved
+ontology, including through equivalence links or examples, are not implicitly
+approved.
+
+OKF format fields, including `sources`, `generated`, and `verified`, retain their
+agreed format semantics and the evidence rules above. Ontology mappings must not
+redefine verification, promote a claim's verification state, or imply independent
+corroboration from attribution, derivation, or review alone.
+
+When no approved property faithfully represents the evidence, skills must
+preserve that evidence in narrative form and report the modeling gap. Introducing
+another ontology requires maintainer approval and a documented pin before use.
+Automatic ontology upgrades are prohibited.
+
 ## Intended outputs
 
 The skills will produce personalized PDF and DOCX resumes with separate evidence
@@ -92,7 +121,7 @@ Real applicant data, source materials, knowledge bundles, analyses, and generate
 outputs must remain in separate private workspaces outside this repository.
 Private workspace setup remains future implementation work.
 
-## Format pin and future implementation
+## Format and ontology pins and future implementation
 
 Before implementing OKF authoring, the project must vendor a copy of Google's
 OKF v0.2 specification, recording an immutable upstream revision and a SHA-256
@@ -100,6 +129,13 @@ checksum of the vendored specification. The upstream link above is a reference,
 not an immutable pin. Specification upgrades must undergo deliberate review
 before changing the pinned copy or adapting project conventions.
 
-Specification vendoring, skill implementation, private workspace setup, and PDF
-and DOCX exporters remain future work. This README introduces no public APIs or
-runtime interfaces.
+Before skill authoring, the project must also vendor the selected ontology
+artifacts, recording each artifact's exact version, immutable source revision or
+dated publication, and SHA-256 checksum. Skills must validate the required pins
+and stop affected metadata authoring if pins are missing or invalid. Changes to
+ontology versions or pinned artifacts require deliberate maintainer review.
+
+The versions selected in this README do not constitute completed artifact
+vendoring. Specification and ontology vendoring, executable pin validation,
+skill implementation, private workspace setup, and PDF and DOCX exporters remain
+future work. This README introduces no skills, public APIs, or runtime interfaces.
