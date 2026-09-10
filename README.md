@@ -1,190 +1,191 @@
 # Resume
 
-Resume is a planned bundle of portable agent skills for curating knowledge
-graphs, producing personalized resumes, and assessing qualifications against
-position requirements with supporting evidence.
+A portable agent skill for maintaining career evidence, assessing qualifications,
+and generating tailored PDF and DOCX resumes with separate evidence reports.
+Applicant data lives in a **separate private Git repository**; this repository
+contains only the reusable skill, code, references, and synthetic tests.
 
-The repository includes pinned format and ontology artifacts with offline
-checksum validation, separate private workspace setup, and OKF concept authoring
-and validation, qualification and resume evidence reports, and PDF/DOCX export.
-Guided skill packaging remains in progress.
+## Install
 
-## Purpose and workflow
+Install with the [skills.sh CLI](https://www.skills.sh/docs) from the private
+repository where you want to use it. Choose your agent interactively:
 
-Guided interviews, supplied documents and URLs, and targeted public research
-will feed a reusable knowledge base. The planned workflow is to:
+```sh
+npx skills add /absolute/path/to/this-repository --skill resume
+```
 
-1. Gather applicant evidence and position information.
-2. Curate that material into linked assertions with source attribution.
-3. Verify claims, surface conflicts, and resolve them with recorded evidence.
-4. Analyze applicant fit against individual position requirements.
-5. Generate a tailored resume and a separate evidence report.
+Once this repository is hosted, replace the local path with its Git URL or
+GitHub `owner/repo`. To install for every supported agent:
 
-Interviews and follow-up research will address unclear claims and missing
-evidence without treating unanswered questions as proof of a qualification gap.
+```sh
+npx skills add <git-url-or-local-path> --skill resume --agent '*'
+```
 
-## Knowledge graph organization
+Use `--copy` when you prefer independent copies over agent-directory symlinks.
+Use `--global` for a user-level installation where the chosen agent supports it.
+The installer requires Node.js; follow its current runtime requirements.
 
-The design uses one reusable Open Knowledge Format (OKF) bundle per applicant
-and one per position. A solo applicant is the default workflow; recruiters may
-manage multiple applicants with separate bundles. Applicant-position analyses
-will reference the relevant bundles and their canonical assertions without
-duplicating canonical facts.
+The skill follows the [Agent Skills format](https://agentskills.io/specification)
+and uses ordinary file, terminal, document, and browsing capabilities without a
+specific model, connector, or API key. Installation was verified with skills CLI
+**1.5.25** for all **79 agent targets**, covering **55 distinct project paths**.
+Every installed copy preserved the instructions and runtime assets and passed
+pin validation. This checks distribution and executable portability; it does
+not claim an end-to-end model evaluation in every agent product.
 
-- **Applicant knowledge:** Personal facts, education, training, employment,
-  qualifications, achievements, and other resume-relevant evidence.
-- **Position knowledge:** Posting requirements, responsibilities, employer
-  research, and recruiter clarifications. Explicit requirements will remain
-  distinguishable from inferred expectations, with evidence and reasoning for
-  those inferences.
+## Use
 
-Knowledge will be recursively decomposed into fine-grained, atomic assertions,
-each in its own OKF concept document. Entity and summary concepts will connect
-those assertions. Each assertion will preserve explicit links to its subject,
-role or event, time, and measurement context, where applicable, so decomposition
-does not strip away meaning or imply broader experience than the evidence supports.
+Ask your agent, for example:
 
-## Provenance, verification, and evidence integrity
+- “Use resume to interview me and organize my career evidence in this private repo.”
+- “Tailor my resume to this job posting and produce PDF, DOCX, and an evidence report.”
+- “Assess this applicant against the position requirements; distinguish missing evidence from gaps.”
+- “Correct this achievement, preserve its history, and refresh the affected application.”
 
-Use the [authoring reference](skills/resume/references/authoring.md) for the
-implemented concept profile, evidence conventions, and validation limits.
-Install the authoring dependency and validate a bundle:
+The agent follows [the skill workflow](skills/resume/SKILL.md):
+
+1. Gather applicant evidence and position information through supplied materials,
+   guided interviews, and targeted public research.
+2. Curate linked atomic assertions with source attribution and contextual links.
+3. Review evidence, surface conflicts, and preserve corrections and supersession.
+4. Map every position requirement to supported facts, partial support, missing
+   evidence, or demonstrated gaps, without numeric scoring.
+5. Select and rephrase supported facts for the role, then export both resume
+   formats and the separate evidence report.
+
+Unanswered questions remain missing evidence, not proof that a qualification is
+absent. Explicit requirements remain distinct from inferred expectations.
+
+## Runtime and private workspace
+
+Python **3.10+** and Git are required. Install the Python dependencies in a virtual
+environment. Use your installed skill's absolute path in place of `<skill-dir>`:
+
+```sh
+python3 -m venv /absolute/path/to/resume-venv
+/absolute/path/to/resume-venv/bin/python -m pip install -r <skill-dir>/scripts/requirements.txt
+```
+
+On Windows, use the virtual environment's `Scripts\python.exe` interpreter.
+The following examples use `python` for that environment's interpreter:
+
+```sh
+python <skill-dir>/scripts/resume.py pins
+python <skill-dir>/scripts/resume.py init --workspace /absolute/path/to/private-resumes
+python <skill-dir>/scripts/resume.py bundle --workspace /absolute/path/to/private-resumes --kind applicant --id solo
+python <skill-dir>/scripts/resume.py bundle --workspace /absolute/path/to/private-resumes --kind position --id engineer
+```
+
+Setup accepts a new empty directory or an existing separate Git repository root.
+If installing the skill into a new project first, initialize that project with
+`git init` before running workspace setup. Existing repository files are preserved.
+The workspace contains:
+
+```text
+private-resumes/
+  resume-workspace.json
+  applicants/<applicant-id>/    # One reusable OKF bundle per person
+  positions/<position-id>/      # One reusable OKF bundle per position
+  sources/                     # Intake material and working drafts
+  analyses/                    # Reference-based plans and evidence reports
+  outputs/<export-id>/          # PDF, DOCX, Markdown, evidence, and checksums
+```
+
+One applicant is the default; recruiters can maintain separate bundles for many
+people. Context and summary concepts connect each person's fine-grained assertions
+without stripping away subject, role/event, time, or measurement context.
+
+Use physical workspace paths; symlinked paths are rejected (for example, use
+`/private/tmp` instead of `/tmp` on macOS). Setup rejects data locations inside
+this source repository or the skill installation. New data directories and files
+use private permissions where supported; existing repository permissions remain
+unchanged. Setup never commits, adds a remote, or publishes data. Keep any data
+remote private and review files before committing or sharing. Generated outputs
+are Git-ignored.
+
+## Evidence and knowledge integrity
+
+The skill uses the vendored Open Knowledge Format **v0.2** specification. Each
+assertion has `sources`, `generated` authorship, and a determinable verification
+state. Missing `verified` means unverified; machine confirmation and human review
+are different trust tiers. The stricter resume authoring profile extends OKF
+without changing its format semantics.
+
+Employer-facing personal claims require actual applicant attestation or
+independent corroboration. Applicant attestation is a person's confirmation,
+separate from OKF computational attestation. Recruiter review records the reviewer,
+time, and evidence basis; review alone does not establish independent corroboration.
+Unresolved disputed claims are excluded from resume text and qualification support.
+
+Corrections preserve prior assertions, replacement links, and dated history.
+Derived claims retain input links, methods, and assumptions and require their own
+evidence assessment. They do not inherit verification from their inputs.
+Assessment plans reference canonical assertions and contain operational review
+and output decisions, not a duplicate knowledge graph. Content hashes invalidate
+old reviews/plans when evidence changes.
+
+Only property URIs defined in these approved, pinned ontologies may be used as
+additional semantic metadata:
+
+| Ontology | Version | Namespace |
+| --- | --- | --- |
+| [Schema.org](https://schema.org/docs/releases.html) | 30.0 | `https://schema.org/` |
+| [PROV-O](https://www.w3.org/TR/2013/REC-prov-o-20130430/) | 2013-04-30 Recommendation | `http://www.w3.org/ns/prov#` |
+| [SKOS](https://www.w3.org/TR/2009/REC-skos-reference-20090818/) | 2009-08-18 Recommendation | `http://www.w3.org/2004/02/skos/core#` |
+
+The authoring profile uses full URIs. Property meanings and value constraints must
+be preserved; imported vocabularies and equivalence links are not approval to use
+other ontologies. Unmappable evidence stays in narrative form with a modeling-gap
+note. New ontologies and pin upgrades require deliberate maintainer approval;
+there are no automatic upgrades. Provenance mappings never elevate verification.
+
+[The pin manifest](skills/resume/references/vendor/pins.json) records immutable
+revisions or dated publications and SHA-256 checksums. All pins are checked
+offline before commands run. Missing or changed pins stop affected operations.
+[Upstream artifacts and license notices](skills/resume/references/vendor/README.md)
+are included in the skill distribution.
+
+## Commands and outputs
+
+Run `python <skill-dir>/scripts/resume.py --help` for arguments.
+
+| Command | Purpose |
+| --- | --- |
+| `pins` | Validate the four reviewed format/ontology artifacts |
+| `init`, `workspace`, `bundle` | Initialize/check private workspaces and create bundles |
+| `add`, `validate` | Add attributed OKF concepts without overwriting and validate bundles |
+| `property` | Inspect a pinned ontology's exact property definition |
+| `snapshot` | Hash current bundle contents for assessment review |
+| `assess` | Check complete requirement coverage and write the evidence report/plan |
+| `export` | Generate PDF, DOCX, Markdown, separate evidence, and output checksums |
+
+Detailed guides: [interview/research](skills/resume/references/interview.md),
+[authoring](skills/resume/references/authoring.md),
+[assessment plan format](skills/resume/references/assessment.md), and
+[export and document review](skills/resume/references/export.md).
+
+Export supports US Letter and A4, selectable PDF text with embedded fonts, and
+editable DOCX paragraphs. Long documents paginate. Unsupported PDF glyphs fail
+with an actionable font message; custom TrueType fonts are supported. Inspect
+complex-script shaping and the final page layout in your document viewer.
+
+Validation checks recorded provenance, references, snapshots, metadata, and
+eligibility. It cannot establish truth, prove a human attestation occurred, or
+judge whether a paraphrase preserves meaning. The agent must review source
+contents, ontology value constraints, and output wording. A passing check is not
+independent corroboration. Browsing and visual document review depend on the
+host's available tools; unavailable checks must be reported honestly.
+
+## Development
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -r skills/resume/scripts/requirements.txt
-.venv/bin/python skills/resume/scripts/resume.py validate --workspace /absolute/path/to/private-resumes --kind applicant --bundle solo
-```
-
-On Windows, use `.venv\Scripts\python.exe` for the virtual environment interpreter.
-The `add` command imports a supplied OKF Markdown concept without overwriting;
-`property` looks up an exact property URI in the pinned ontology definitions.
-Validation checks structure and metadata, while evidence meaning and ontology
-value constraints require source-grounded review.
-
-Every assertion must have source attribution, authorship metadata, and a
-determinable verification state. The design will use OKF's `sources`,
-`generated`, and `verified` conventions and actor identities. Under OKF, an
-absent `verified` field means unverified; human review and machine confirmation
-are distinct trust tiers. These conventions are defined in the official
-[OKF v0.2 specification](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md).
-
-OKF makes these metadata families optional. Requiring attribution and authorship
-for every assertion, atomic decomposition, and the following evidence rules are
-project extensions. Self-attestation must remain distinguishable from independent
-corroboration, even when both involve human review.
-
-- Applicants or recruiters may record human review, identifying the reviewer
-  and time. Recruiter review must identify its evidence basis; review alone
-  does not establish independent corroboration.
-- Employer-facing personal claims require applicant attestation or independent
-  corroboration. Applicant attestation means the applicant confirms a personal
-  claim; it is separate from OKF's computational attestation mechanism.
-- Corrections and supersession history must be preserved, with links from prior
-  assertions to their replacements. Unresolved disputed claims must be excluded
-  from employer-facing outputs and from facts used to establish qualification.
-- Derived claims must retain their inputs, methods, and assumptions. Derivation
-  must not automatically promote verification state or inherit human review;
-  the resulting claim requires its own evidence assessment.
-
-## Approved ontologies and semantic metadata
-
-The project vendors the following approved ontology versions. Exact sources,
-immutable revisions or dated publications, and checksums are recorded in
-[the pin manifest](skills/resume/references/vendor/pins.json).
-
-| Ontology and source | Selected version | Canonical namespace | Intended use |
-| --- | --- | --- | --- |
-| [Schema.org](https://schema.org/docs/releases.html) | 30.0 | `https://schema.org/` | People, organizations, employment, credentials, and job requirements |
-| [PROV-O](https://www.w3.org/TR/2013/REC-prov-o-20130430/) | W3C Recommendation, 2013-04-30 | `http://www.w3.org/ns/prov#` | Attribution, derivation, and provenance relationships |
-| [SKOS](https://www.w3.org/TR/2009/REC-skos-reference-20090818/) | W3C Recommendation, 2009-08-18 | `http://www.w3.org/2004/02/skos/core#` | Concept labels, hierarchies, and mappings |
-
-Every additional semantic metadata attribute must identify an exact property URI
-defined in an approved, pinned ontology. Local aliases require explicit mappings
-to those URIs and must preserve the property's meaning and value constraints.
-Invented properties are prohibited. Vocabularies referenced by an approved
-ontology, including through equivalence links or examples, are not implicitly
-approved.
-
-OKF format fields, including `sources`, `generated`, and `verified`, retain their
-agreed format semantics and the evidence rules above. Ontology mappings must not
-redefine verification, promote a claim's verification state, or imply independent
-corroboration from attribution, derivation, or review alone.
-
-When no approved property faithfully represents the evidence, skills must
-preserve that evidence in narrative form and report the modeling gap. Introducing
-another ontology requires maintainer approval and a documented pin before use.
-Automatic ontology upgrades are prohibited.
-
-## Outputs
-
-The exporter produces personalized PDF and DOCX resumes with separate evidence
-reports tracing claims to their supporting assertions, sources, and verification
-states. Tailoring may select, reorder, and rephrase supported facts while
-preserving their meaning, scope, and qualifications.
-
-Qualification assessments map each position requirement to supporting
-facts, partial support, missing evidence, or demonstrated gaps, without numeric
-scoring. Reports distinguish missing evidence from evidence that a
-requirement is not met, and explicit requirements from inferred expectations.
-
-Follow the [assessment reference](skills/resume/references/assessment.md) to
-prepare a plan referencing canonical assertions and generate a report with
-`resume.py assess`. The tool checks complete requirement coverage, recorded
-claim eligibility, derivation inputs, and current bundle snapshots. Review
-decisions remain explicit inputs grounded in source review; the tool does not
-infer truth or promote canonical verification.
-
-Export a reviewed plan with `resume.py export --workspace <private-root> --file
-<plan.json> --id <new-output-id>`. The [export reference](skills/resume/references/export.md)
-describes PDF/DOCX output, separate evidence reports, paper sizes, font coverage,
-and final document review. Generated outputs remain in the private repository.
-
-## Portability and privacy
-
-Skills will be authored as host-independent `SKILL.md` instructions. Portability
-is a design goal; compatibility with particular agent hosts has not been tested.
-
-Real applicant data, source materials, knowledge bundles, analyses, and generated
-outputs must remain in separate private workspaces outside this repository.
-Initialize a new data repository outside this checkout, or use the root of an
-existing separate Git repository. Python 3.10+ and Git are required:
-
-```sh
-python3 skills/resume/scripts/resume.py init --workspace /absolute/path/to/private-resumes
-python3 skills/resume/scripts/resume.py bundle --workspace /absolute/path/to/private-resumes --kind applicant --id solo
-python3 skills/resume/scripts/resume.py bundle --workspace /absolute/path/to/private-resumes --kind position --id engineer
-python3 skills/resume/scripts/resume.py workspace --workspace /absolute/path/to/private-resumes
-```
-
-Use an absolute script path when running from another directory. Setup preserves
-existing repository files and creates `applicants/`, `positions/`, `sources/`,
-`analyses/`, and `outputs/`. Each applicant and position gets its own OKF bundle.
-Repeated setup validates the existing workspace. Conflicting directories,
-symlinked workspace paths, and locations inside this skill repository are rejected.
-Use physical paths (for example, `/private/tmp` instead of `/tmp` on macOS).
-
-Generated outputs are Git-ignored. Canonical evidence and analyses can be tracked
-in the private data repository. Setup does not commit, add a remote, or publish
-data. Keep any remote private; review staged files before committing or sharing.
-New data directories and configuration files use private local permissions where
-supported; existing repository permissions are preserved.
-
-## Format and ontology pins
-
-The unmodified OKF v0.2 specification and selected ontology artifacts are
-[vended with provenance and license notices](skills/resume/references/vendor/README.md)
-inside the skill distribution directory. Validate all four artifacts offline:
-
-```sh
-python3 skills/resume/scripts/pins.py
 .venv/bin/python -m pip install -r tests/requirements.txt
 .venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python skills/resume/scripts/pins.py
 ```
 
-The validator rejects missing artifacts, checksum mismatches, unapproved
-versions, incomplete manifests, and nonlocal artifact paths. Stop affected
-authoring if validation fails. Specification and ontology upgrades require
-deliberate maintainer review; never refresh pins automatically.
-
-Guided skill packaging remains in progress.
+Tests use synthetic data in temporary separate repositories. They exercise
+workspace isolation, provenance and ontology validation, requirement coverage,
+eligibility rejection, stale evidence, derivations, and PDF/DOCX text and export
+failure cleanup. Do not add real applicant data to this repository.
