@@ -44,12 +44,17 @@ class WorkspaceTests(unittest.TestCase):
         self.assertEqual((self.root / "README.md").read_text(), "User data repository")
 
     def test_source_repo_and_nested_repo_rejected(self):
-        with self.assertRaisesRegex(ValueError, "outside"):
+        with self.assertRaisesRegex(ValueError, "nest"):
             init_workspace(SCRIPTS.parents[2] / "private-data")
         init_workspace(self.root)
         with self.assertRaisesRegex(ValueError, "nest"):
             init_workspace(self.root / "nested")
         self.assertFalse((self.root / "nested").exists())
+
+    def test_skill_installation_rejected(self):
+        for path in (SCRIPTS.parent, SCRIPTS.parent / "private-data"):
+            with self.subTest(path=path), self.assertRaisesRegex(ValueError, "outside"):
+                init_workspace(path)
 
     def test_existing_unmanaged_data_and_collisions_rejected(self):
         self.root.mkdir()

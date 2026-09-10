@@ -17,10 +17,8 @@ def checked_root(value):
         if part.is_symlink():
             raise ValueError(f"Workspace path must not use symlinks: {part}")
     path = path.resolve()
-    protected = [SKILL_ROOT]
-    protected.extend(p for p in SKILL_ROOT.parents if (p / ".resume-skill-repository").exists())
-    if any(path == p or p in path.parents for p in protected):
-        raise ValueError("Resume data must be outside the skill source and installation directories")
+    if path == SKILL_ROOT or SKILL_ROOT in path.parents:
+        raise ValueError("Resume data must be outside the skill installation directory")
     return path
 
 

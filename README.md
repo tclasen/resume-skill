@@ -97,7 +97,7 @@ without stripping away subject, role/event, time, or measurement context.
 
 Use physical workspace paths; symlinked paths are rejected (for example, use
 `/private/tmp` instead of `/tmp` on macOS). Setup rejects data locations inside
-this source repository or the skill installation. New data directories and files
+the skill installation and creation of nested Git repositories. New data directories and files
 use private permissions where supported; existing repository permissions remain
 unchanged. Setup never commits, adds a remote, or publishes data. Keep any data
 remote private and review files before committing or sharing. Generated outputs
