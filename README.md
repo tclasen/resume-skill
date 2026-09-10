@@ -18,7 +18,7 @@ Once this repository is hosted, replace the local path with its Git URL or
 GitHub `owner/repo`. To install for every supported agent:
 
 ```sh
-npx skills add <git-url-or-local-path> --skill resume --agent '*'
+npx skills add <git-url-or-local-path> --skill resume --agent '*' --copy
 ```
 
 Use `--copy` when you prefer independent copies over agent-directory symlinks.
