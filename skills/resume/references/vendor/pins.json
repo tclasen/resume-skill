@@ -1,0 +1,41 @@
+{
+  "manifest_version": 1,
+  "artifacts": [
+    {
+      "id": "okf",
+      "file": "okf-0.2.md",
+      "version": "0.2",
+      "revision": "ad30107c31c06aec8a7d5636e0d1058118604e6f",
+      "source": "https://raw.githubusercontent.com/GoogleCloudPlatform/open-knowledge-format/ad30107c31c06aec8a7d5636e0d1058118604e6f/SPEC.md",
+      "namespace": null,
+      "sha256": "26aa5da029278939f914e578107242d9607d4f2dc5fe153272b82f9ed1030101"
+    },
+    {
+      "id": "schemaorg",
+      "file": "schemaorg-30.0.jsonld",
+      "version": "30.0",
+      "revision": "420231f6bfac8372fc564abb121fae57ccb36a0c",
+      "source": "https://raw.githubusercontent.com/schemaorg/schemaorg/420231f6bfac8372fc564abb121fae57ccb36a0c/data/releases/30.0/schemaorg-all-https.jsonld",
+      "namespace": "https://schema.org/",
+      "sha256": "06227db49dd4674227727176c9cd1e5bbd4174c1cef9391c7ed4dfcef865f2a8"
+    },
+    {
+      "id": "prov",
+      "file": "prov-o-20130430.rdf",
+      "version": "2013-04-30",
+      "revision": "2013-04-30",
+      "source": "https://www.w3.org/ns/prov-o-20130430.owl",
+      "namespace": "http://www.w3.org/ns/prov#",
+      "sha256": "71ecff298c82b8c12aca0714a7bcbfd0b798cda9a7b3c89d9aeb0ef358cb79d0"
+    },
+    {
+      "id": "skos",
+      "file": "skos-20090818.rdf",
+      "version": "2009-08-18",
+      "revision": "2009-08-18",
+      "source": "https://www.w3.org/2009/08/skos-reference/skos.rdf",
+      "namespace": "http://www.w3.org/2004/02/skos/core#",
+      "sha256": "e79633b8d0564816cee8a99f5c9acf9a0e6fc7257c7209acd684ecad53a89dd6"
+    }
+  ]
+}

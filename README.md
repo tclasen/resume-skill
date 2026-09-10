@@ -4,10 +4,10 @@ Resume is a planned bundle of portable agent skills for curating knowledge
 graphs, producing personalized resumes, and assessing qualifications against
 position requirements with supporting evidence.
 
-The repository currently contains this design overview and the engineering
-working agreement. No skills, knowledge bundles, private workspace setup, or
-document exporters are implemented. All capabilities below describe intended
-behavior.
+The repository includes pinned format and ontology artifacts with offline
+checksum validation. Skills, knowledge bundles, private workspace setup, and
+document exporters are not yet implemented. The workflow below describes their
+intended behavior.
 
 ## Purpose and workflow
 
@@ -73,9 +73,9 @@ corroboration, even when both involve human review.
 
 ## Approved ontologies and semantic metadata
 
-The project selects the following ontologies and versions for future skills.
-The source links document these selections; artifact vendoring and checksum pins
-remain future work under the pinning requirements below.
+The project vendors the following approved ontology versions. Exact sources,
+immutable revisions or dated publications, and checksums are recorded in
+[the pin manifest](skills/resume/references/vendor/pins.json).
 
 | Ontology and source | Selected version | Canonical namespace | Intended use |
 | --- | --- | --- | --- |
@@ -121,21 +121,21 @@ Real applicant data, source materials, knowledge bundles, analyses, and generate
 outputs must remain in separate private workspaces outside this repository.
 Private workspace setup remains future implementation work.
 
-## Format and ontology pins and future implementation
+## Format and ontology pins
 
-Before implementing OKF authoring, the project must vendor a copy of Google's
-OKF v0.2 specification, recording an immutable upstream revision and a SHA-256
-checksum of the vendored specification. The upstream link above is a reference,
-not an immutable pin. Specification upgrades must undergo deliberate review
-before changing the pinned copy or adapting project conventions.
+The unmodified OKF v0.2 specification and selected ontology artifacts are
+[vended with provenance and license notices](skills/resume/references/vendor/README.md)
+inside the skill distribution directory. Validate all four artifacts offline:
 
-Before skill authoring, the project must also vendor the selected ontology
-artifacts, recording each artifact's exact version, immutable source revision or
-dated publication, and SHA-256 checksum. Skills must validate the required pins
-and stop affected metadata authoring if pins are missing or invalid. Changes to
-ontology versions or pinned artifacts require deliberate maintainer review.
+```sh
+python3 skills/resume/scripts/pins.py
+python3 -m unittest discover -s tests -v
+```
 
-The versions selected in this README do not constitute completed artifact
-vendoring. Specification and ontology vendoring, executable pin validation,
-skill implementation, private workspace setup, and PDF and DOCX exporters remain
-future work. This README introduces no skills, public APIs, or runtime interfaces.
+The validator rejects missing artifacts, checksum mismatches, unapproved
+versions, incomplete manifests, and nonlocal artifact paths. Stop affected
+authoring if validation fails. Specification and ontology upgrades require
+deliberate maintainer review; never refresh pins automatically.
+
+Skill implementation, private workspace setup, and PDF and DOCX exporters remain
+future work.
