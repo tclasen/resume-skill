@@ -1,2 +1,2 @@
 -r ../skills/resume/scripts/requirements.txt
-pypdf==6.8.0
+pypdf==6.18.0

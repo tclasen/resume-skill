@@ -178,11 +178,23 @@ host's available tools; unavailable checks must be reported honestly.
 
 ## Development
 
+See the [security policy](SECURITY.md) for private vulnerability reporting and
+[supply-chain security](docs/supply-chain-security.md) for the SLSA Build Level 2
+release design and artifact verification instructions.
+
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r tests/requirements.txt
 .venv/bin/python -m unittest discover -s tests -v
 .venv/bin/python skills/resume/scripts/pins.py
+```
+
+CI also audits runtime, test, and audit-tool dependencies for known vulnerabilities
+on pull requests, pushes to `main`, and weekly. To run that check locally:
+
+```sh
+.venv/bin/python -m pip install -r tests/security-requirements.txt
+.venv/bin/python -m pip_audit -r tests/security-requirements.txt
 ```
 
 Tests use synthetic data in temporary separate repositories. They exercise
